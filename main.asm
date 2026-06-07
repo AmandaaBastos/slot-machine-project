@@ -1,5 +1,5 @@
 ; ======================================================================
-; PROJETO FINAL MATA49 - CAÇA-NÍQUEIS 
+; PROJETO FINAL MATA49 - CAÇA-NÍQUEIS
 ; Sorteio Dinâmico por Entropia de Hardware (TCNT0)
 ; 20% de Vitória | Combinações de 000 a 999
 ;======================================================================
@@ -68,7 +68,7 @@ RESET:
     out EIFR, r16
 
 ; ==========================================
-; LOOP PRINCIPAL (AGUARDANDO BOTÃO E PISCANDO)
+; LOOP PRINCIPAL (AGUARDANDO BOTÃO)
 ; ==========================================
 MAIN_LOOP:
     cpi R18, 1
@@ -89,7 +89,7 @@ MAIN_LOOP:
     rjmp MAIN_LOOP
 
 ; ==========================================
-; ETAPA 1: ETAPA 1: LÓGICA DE SORTEIO (20% CHANCE)
+; ETAPA 1: LÓGICA DE SORTEIO (20% CHANCE)
 ; ==========================================
 CALCULA_RESULTADO:
     
