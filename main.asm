@@ -50,7 +50,7 @@ RESET:
     ldi R21, 0          
     ldi R22, 0          
     ldi R24, 0    ; flagzinha do led. Coloquei pra 0 = desliga, 1=liga 2 2 pisca
-
+;;
     ; INT0 (Botão)
    ; ldi r16, (1<<ISC01)
     ldi r16, (1<<ISC01) | (1<<ISC00) ; fiz do bug que começava antes de larga o botão
