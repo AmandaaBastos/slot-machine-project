@@ -2,7 +2,7 @@
 ; PROJETO FINAL MATA49 - CAÇA-NÍQUEIS
 ; Sorteio Dinâmico por Entropia de Hardware (TCNT0)
 ; 20% de Vitória | Combinações de 000 a 999
-; ======================================================================
+;======================================================================
 
 .include "m328Pdef.inc"
 
@@ -49,9 +49,11 @@ RESET:
     ldi R20, 0          
     ldi R21, 0          
     ldi R22, 0          
+    ldi R24, 0    ; flagzinha do led. Coloquei pra 0 = desliga, 1=liga 2 2 pisca
 
     ; INT0 (Botão)
-    ldi r16, (1<<ISC01)
+   ; ldi r16, (1<<ISC01)
+    ldi r16, (1<<ISC01) | (1<<ISC00) ; fiz do bug que começava antes de larga o botão
     sts EICRA, r16
     ldi r16, (1<<INT0)
     out EIMSK, r16
@@ -72,22 +74,69 @@ RESET:
 MAIN_LOOP:
     cpi R18, 1
     breq CALCULA_RESULTADO
+    
+   
+    cpi R24, 2
+    brne MAIN_LOOP
+    
+    ;lógica do led
+    ldi R29, 100     
+    rcall DELAY_MS
+    in r16, PORTB
+    ldi r17, (1<<PB3)
+    eor r16, r17        
+    out PORTB, r16
+
     rjmp MAIN_LOOP
 
 ; ==========================================
 ; ETAPA 1: LÓGICA DE SORTEIO (20% CHANCE)
 ; ==========================================
 CALCULA_RESULTADO:
+    
     in r16, PORTB
     andi r16, ~(1<<PB3)
     out PORTB, r16
+    ldi R24, 0   ; Reset do led p/ prox rodada
 
     ; 1. LÊ A ENTROPIA DO HARDWARE NO MOMENTO EXATO DO CLIQUE
     in r17, TCNT0       ; R17 = Valor Aleatório (0 a 255)
 
-    ; 2. CALCULA A CHANCE DE VITÓRIA (20% de 255 é aprox. 51)
+    ; 2. 20% para vitória
     cpi r17, 51
-    brlo DEU_VITORIA    ; Se R17 for menor que 51, ganhou!
+    brlo DEU_VITORIA_777; Vitoria
+
+    ;2.1 40% para vitoria normal
+    cpi r17, 102
+    brlo DEU_VITORIA_NORMAL
+    
+    ; o resto da porcentagem para Bahia(calma, esporte-clube derrota, é só uma piada...)
+    rjmp DEU_DERROTA
+
+DEU_VITORIA_777:
+    ldi r16, 7
+    mov R26, r16
+    mov R27, r16
+    mov R28, r16
+    ldi R24, 2   ; ativa o modo blink  
+    rjmp INICIA_ANIMACAO
+
+DEU_VITORIA_NORMAL:
+    ; Pega um número aleatório (0 a 9)
+    mov r16, r17
+    rcall MODULO_10
+    
+    ; Essa logica, impede de da vitria normal poder ser 77 também
+    cpi r16, 7
+    brne APLICA_VITORIA_NORMAL
+    ldi r16, 8          ; Se der 7, transforma em 8
+    
+APLICA_VITORIA_NORMAL:
+    mov R26, r16
+    mov R27, r16
+    mov R28, r16
+    ldi R24, 1   ; led ligado
+    rjmp INICIA_ANIMACAO
 
 DEU_DERROTA:
     ; Gera o Dígito 1
@@ -95,7 +144,7 @@ DEU_DERROTA:
     rcall MODULO_10
     mov R26, r16
 
-    ; Gera o Dígito 2 (Adiciona salto primo para ser diferente)
+    ; Gera o Dígito 2
     mov r16, r17
     ldi r23, 43
     add r16, r23
@@ -121,14 +170,6 @@ DEU_DERROTA:
     rcall MODULO_10
     mov R28, r16
     rjmp INICIA_ANIMACAO
-
-DEU_VITORIA:
-    ; Pega um número aleatório (0 a 9) e estampa nos 3 displays
-    mov r16, r17
-    rcall MODULO_10
-    mov R26, r16
-    mov R27, r16
-    mov R28, r16
 
 ; ==========================================
 ; ETAPA 2: ANIMAÇÃO EM 3 FASES
@@ -203,18 +244,18 @@ F3_DELAY:
 ; ==========================================
 ; ETAPA 3: FINALIZA E EXIBE
 ; ==========================================
-    cp R20, R21
-    brne FIM_SORTEIO
-    cp R21, R22
-    brne FIM_SORTEIO
     
+    cpi R24, 1
+    brne FIM_SORTEIO
+
+    ; Se R24 = 1 , GG e acende fixo. se for pra 2 GG e fica piscando
     in r16, PORTB
     ori r16, (1<<PB3)
     out PORTB, r16
 
 FIM_SORTEIO:
     ldi R18, 0          
-    
+
     ldi r16, (1<<INTF0)
     out EIFR, r16
     
