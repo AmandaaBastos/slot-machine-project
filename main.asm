@@ -49,11 +49,10 @@ RESET:
     ldi R20, 0          
     ldi R21, 0          
     ldi R22, 0          
-    ldi R24, 0    ; flagzinha do led. Coloquei pra 0 = desliga, 1=liga 2 2 pisca
-;;
+    ldi R24, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
+
     ; INT0 (Botão)
-   ; ldi r16, (1<<ISC01)
-    ldi r16, (1<<ISC01) | (1<<ISC00) ; fiz do bug que começava antes de larga o botão
+    ldi r16, (1<<ISC01) | (1<<ISC00)
     sts EICRA, r16
     ldi r16, (1<<INT0)
     out EIMSK, r16
@@ -106,11 +105,11 @@ CALCULA_RESULTADO:
     cpi r17, 51
     brlo DEU_VITORIA_777; Vitoria
 
-    ;2.1 40% para vitoria normal
+    ; 3. 40% para vitoria normal
     cpi r17, 102
     brlo DEU_VITORIA_NORMAL
     
-    ; o resto da porcentagem para Bahia(calma, esporte-clube derrota, é só uma piada...)
+    ; 4. resto da porcentagem derrota
     rjmp DEU_DERROTA
 
 DEU_VITORIA_777:
@@ -248,7 +247,7 @@ F3_DELAY:
     cpi R24, 1
     brne FIM_SORTEIO
 
-    ; Se R24 = 1 , GG e acende fixo. se for pra 2 GG e fica piscando
+    ; Se R24 = 1 , Ganha e acende fixo. se for pra 2 Ganha e fica piscando
     in r16, PORTB
     ori r16, (1<<PB3)
     out PORTB, r16
