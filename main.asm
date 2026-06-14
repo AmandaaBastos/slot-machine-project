@@ -105,7 +105,7 @@ CALCULA_RESULTADO:
     cpi r17, 51
     brlo DEU_VITORIA_777; Vitoria
 
-    ; 3. 40% para vitoria normal
+    ; 3. 20% para vitoria normal
     cpi r17, 102
     brlo DEU_VITORIA_NORMAL
     
