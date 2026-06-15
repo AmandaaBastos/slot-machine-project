@@ -22,7 +22,7 @@ O `TCNT0` está em contagem livre com prescaler /64 (~977 Hz de overflow). O val
 |---|---|
 | Vitória Jackpot (777) | 5% |
 | Vitória normal | 10% |
-| Derrota | 85% |
+| Derrota | 80% |
 
 > O resultado é obtido pelo valor do Timer0.
 
