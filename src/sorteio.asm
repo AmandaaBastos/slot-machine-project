@@ -5,7 +5,7 @@ CALCULA_RESULTADO:
     IN AUX, PORTB
     ANDI AUX, ~(1<<PB3)
     OUT PORTB, AUX
-    LDI LED_FLAG, 0   ; Reset do led p/ prox rodada
+    LDI LED_STATE, 0   ; Reset do led p/ prox rodada
 
     ; 1. LÊ A ENTROPIA DO HARDWARE NO MOMENTO EXATO DO CLIQUE
     IN AUX_2, TCNT0       ; AUX_2 = Valor Aleatório (0 a 255)
@@ -26,7 +26,7 @@ DEU_VITORIA_777:
     MOV RESULT_UNIT, AUX
     MOV RESULT_TENS, AUX
     MOV RESULT_HUNDREDS, AUX
-    LDI LED_FLAG, 2   ; ativa o modo blink
+    LDI LED_STATE, 2   ; ativa o modo blink
     RJMP INICIA_ANIMACAO
 
 DEU_VITORIA_NORMAL:
@@ -43,7 +43,7 @@ APLICA_VITORIA_NORMAL:
     MOV RESULT_UNIT, AUX
     MOV RESULT_TENS, AUX
     MOV RESULT_HUNDREDS, AUX
-    LDI LED_FLAG, 1   ; led ligado fixo
+    LDI LED_STATE, 1   ; led ligado fixo
     RJMP INICIA_ANIMACAO
 
 DEU_DERROTA:
@@ -153,10 +153,10 @@ F3_DELAY:
 ; ETAPA 3: FINALIZA E EXIBE
 ; ==========================================
 
-    CPI LED_FLAG, 1
+    CPI LED_STATE, 1
     BRNE FIM_SORTEIO
 
-    ; Se LED_FLAG = 1, ganha e acende fixo. Se LED_FLAG = 2, ganha e fica piscando (via MAIN_LOOP)
+    ; Se LED_STATE = 1, ganha e acende fixo. Se LED_STATE = 2, ganha e fica piscando (via MAIN_LOOP)
     IN AUX, PORTB
     ORI AUX, (1<<PB3)
     OUT PORTB, AUX

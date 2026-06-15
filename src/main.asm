@@ -19,7 +19,7 @@
 .def DIGIT_TENS = R21
 .def DIGIT_HUNDREDS = R22
 .def ANIMATION_COUNTER = R23
-.def LED_FLAG = R24
+.def LED_STATE = R24
 .def RESULT_UNIT = R26
 .def RESULT_TENS = R27
 .def RESULT_HUNDREDS = R28
@@ -74,7 +74,7 @@ RESET:
     LDI DIGIT_UNIT, 10
     LDI DIGIT_TENS, 10
     LDI DIGIT_HUNDREDS, 10
-    LDI LED_FLAG, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
+    LDI LED_STATE, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
 
     ; INT0 (Botão)
     LDI AUX, (1<<ISC01) | (1<<ISC00)
