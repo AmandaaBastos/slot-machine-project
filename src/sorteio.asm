@@ -2,182 +2,182 @@
 ; ETAPA 1: LÓGICA DE SORTEIO (20% CHANCE)
 ; ==========================================
 CALCULA_RESULTADO:
-    IN r16, PORTB
-    ANDI r16, ~(1<<PB3)
-    OUT PORTB, r16
-    LDI R24, 0   ; Reset do led p/ prox rodada
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB3)
+    OUT PORTB, AUX
+    LDI LED_FLAG, 0   ; Reset do led p/ prox rodada
 
     ; 1. LÊ A ENTROPIA DO HARDWARE NO MOMENTO EXATO DO CLIQUE
-    IN r17, TCNT0       ; R17 = Valor Aleatório (0 a 255)
+    IN AUX_2, TCNT0       ; AUX_2 = Valor Aleatório (0 a 255)
 
     ; 2. 20% para vitória 777
-    CPI r17, 51
+    CPI AUX_2, 51
     BRLO DEU_VITORIA_777
 
     ; 3. 20% para vitória normal
-    CPI r17, 102
+    CPI AUX_2, 102
     BRLO DEU_VITORIA_NORMAL
 
     ; 4. resto da porcentagem derrota
     RJMP DEU_DERROTA
 
 DEU_VITORIA_777:
-    LDI r16, 7
-    MOV R26, r16
-    MOV R27, r16
-    MOV R28, r16
-    LDI R24, 2   ; ativa o modo blink
+    LDI AUX, 7
+    MOV RESULT_UNIT, AUX
+    MOV RESULT_TENS, AUX
+    MOV RESULT_HUNDREDS, AUX
+    LDI LED_FLAG, 2   ; ativa o modo blink
     RJMP INICIA_ANIMACAO
 
 DEU_VITORIA_NORMAL:
     ; Pega um número aleatório (0 a 9)
-    MOV r16, r17
+    MOV AUX, AUX_2
     RCALL MODULO_10
 
     ; Impede que vitória normal também seja 7
-    CPI r16, 7
+    CPI AUX, 7
     BRNE APLICA_VITORIA_NORMAL
-    LDI r16, 8          ; Se der 7, transforma em 8
+    LDI AUX, 8          ; Se der 7, transforma em 8
 
 APLICA_VITORIA_NORMAL:
-    MOV R26, r16
-    MOV R27, r16
-    MOV R28, r16
-    LDI R24, 1   ; led ligado fixo
+    MOV RESULT_UNIT, AUX
+    MOV RESULT_TENS, AUX
+    MOV RESULT_HUNDREDS, AUX
+    LDI LED_FLAG, 1   ; led ligado fixo
     RJMP INICIA_ANIMACAO
 
 DEU_DERROTA:
     ; Gera o Dígito 1
-    MOV r16, r17
+    MOV AUX, AUX_2
     RCALL MODULO_10
-    MOV R26, r16
+    MOV RESULT_UNIT, AUX
 
     ; Gera o Dígito 2 (Adiciona salto primo para ser diferente)
-    MOV r16, r17
-    LDI r23, 43
-    ADD r16, r23
+    MOV AUX, AUX_2
+    LDI R25, 43
+    ADD AUX, R25
     RCALL MODULO_10
-    MOV R27, r16
+    MOV RESULT_TENS, AUX
 
     ; Gera o Dígito 3
-    MOV r16, r17
-    LDI r23, 107
-    ADD r16, r23
+    MOV AUX, AUX_2
+    LDI R25, 107
+    ADD AUX, R25
     RCALL MODULO_10
-    MOV R28, r16
+    MOV RESULT_HUNDREDS, AUX
 
     ; Impede que haja uma falsa vitória na derrota
-    CP R26, R27
+    CP RESULT_UNIT, RESULT_TENS
     BRNE INICIA_ANIMACAO
-    CP R27, R28
+    CP RESULT_TENS, RESULT_HUNDREDS
     BRNE INICIA_ANIMACAO
 
     ; Se os 3 ficarem iguais por acidente, altera o último
-    INC R28
-    MOV r16, R28
+    INC RESULT_HUNDREDS
+    MOV AUX, RESULT_HUNDREDS
     RCALL MODULO_10
-    MOV R28, r16
+    MOV RESULT_HUNDREDS, AUX
     RJMP INICIA_ANIMACAO
 
 ; ==========================================
 ; ETAPA 2: ANIMAÇÃO EM 3 FASES
 ; ==========================================
 INICIA_ANIMACAO:
-    LDI R29, 8
+    LDI DELAY_AUX, 8
 
     ; FASE 1
-    LDI R25, 30
+    LDI ANIMATION_COUNTER, 30
 FASE_1:
-    INC R20
-    CPI R20, 10
+    INC DIGIT_UNIT
+    CPI DIGIT_UNIT, 10
     BRNE F1_D2
-    LDI R20, 0
+    LDI DIGIT_UNIT, 0
 F1_D2:
-    INC R21
-    CPI R21, 10
+    INC DIGIT_TENS
+    CPI DIGIT_TENS, 10
     BRNE F1_D3
-    LDI R21, 0
+    LDI DIGIT_TENS, 0
 F1_D3:
-    INC R22
-    CPI R22, 10
+    INC DIGIT_HUNDREDS
+    CPI DIGIT_HUNDREDS, 10
     BRNE F1_DELAY
-    LDI R22, 0
+    LDI DIGIT_HUNDREDS, 0
 F1_DELAY:
     RCALL DELAY_MS
-    INC R29
-    DEC R25
+    INC DELAY_AUX
+    DEC ANIMATION_COUNTER
     BRNE FASE_1
 
-    MOV R20, R26
+    MOV DIGIT_UNIT, RESULT_UNIT
 
     ; FASE 2
-    LDI R25, 20
+    LDI ANIMATION_COUNTER, 20
 FASE_2:
-    INC R21
-    CPI R21, 10
+    INC DIGIT_TENS
+    CPI DIGIT_TENS, 10
     BRNE F2_D3
-    LDI R21, 0
+    LDI DIGIT_TENS, 0
 F2_D3:
-    INC R22
-    CPI R22, 10
+    INC DIGIT_HUNDREDS
+    CPI DIGIT_HUNDREDS, 10
     BRNE F2_DELAY
-    LDI R22, 0
+    LDI DIGIT_HUNDREDS, 0
 F2_DELAY:
     RCALL DELAY_MS
-    INC R29
-    INC R29
-    DEC R25
+    INC DELAY_AUX
+    INC DELAY_AUX
+    DEC ANIMATION_COUNTER
     BRNE FASE_2
 
-    MOV R21, R27
+    MOV DIGIT_TENS, RESULT_TENS
 
     ; FASE 3
-    LDI R25, 12
+    LDI ANIMATION_COUNTER, 12
 FASE_3:
-    INC R22
-    CPI R22, 10
+    INC DIGIT_HUNDREDS
+    CPI DIGIT_HUNDREDS, 10
     BRNE F3_DELAY
-    LDI R22, 0
+    LDI DIGIT_HUNDREDS, 0
 F3_DELAY:
     RCALL DELAY_MS
-    INC R29
-    INC R29
-    INC R29
-    INC R29
-    DEC R25
+    INC DELAY_AUX
+    INC DELAY_AUX
+    INC DELAY_AUX
+    INC DELAY_AUX
+    DEC ANIMATION_COUNTER
     BRNE FASE_3
 
-    MOV R22, R28
+    MOV DIGIT_HUNDREDS, RESULT_HUNDREDS
 
 ; ==========================================
 ; ETAPA 3: FINALIZA E EXIBE
 ; ==========================================
 
-    CPI R24, 1
+    CPI LED_FLAG, 1
     BRNE FIM_SORTEIO
 
-    ; Se R24 = 1, ganha e acende fixo. Se R24 = 2, ganha e fica piscando (via MAIN_LOOP)
-    IN r16, PORTB
-    ORI r16, (1<<PB3)
-    OUT PORTB, r16
+    ; Se LED_FLAG = 1, ganha e acende fixo. Se LED_FLAG = 2, ganha e fica piscando (via MAIN_LOOP)
+    IN AUX, PORTB
+    ORI AUX, (1<<PB3)
+    OUT PORTB, AUX
 
 FIM_SORTEIO:
-    LDI R18, 0
+    LDI BUTTON_PRESSED_FLAG, 0
 
-    LDI r16, (1<<INTF0)
-    OUT EIFR, r16
+    LDI AUX, (1<<INTF0)
+    OUT EIFR, AUX
 
     RJMP MAIN_LOOP
 
 ; ==========================================
 ; SUBROTINA: MÓDULO 10
-; Recebe valor em R16, subtrai 10 até ficar < 10.
-; Retorna o resto da divisão em R16.
+; Recebe valor em AUX, subtrai 10 até ficar < 10.
+; Retorna o resto da divisão em AUX.
 ; ==========================================
 MODULO_10:
-    CPI r16, 10
+    CPI AUX, 10
     BRLO FIM_MOD
-    SUBI r16, 10
+    SUBI AUX, 10
     RJMP MODULO_10
 FIM_MOD:
     RET
