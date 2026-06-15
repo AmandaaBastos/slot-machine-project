@@ -100,7 +100,7 @@ MAIN_LOOP:
     BRNE CHECK_LED
     RJMP CALCULA_RESULTADO
 CHECK_LED:
-    CPI LED_FLAG, 2
+    CPI LED_STATE, 2
     BRNE MAIN_LOOP
 
     ; lógica do led pisca
