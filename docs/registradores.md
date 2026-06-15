@@ -27,7 +27,7 @@ Todos os registradores de uso geral da aplicação.
 | `TCCR0B`  | Prescaler do Timer0 |
 | `TCCR1B`  | Prescaler do Timer1 |
 | `TIMSK0`  | Habilita interrupção de overflow do Timer0 para a troca de displays |
-| `TCNT0`  | Contador do Timer0 — fonte de entropia para o resultado final |
+| `TCNT0`  | Contador do Timer0 — fonte de entropia para determinar vitória |
 | `TCNT1`  | Contador do Timer0 — fonte de entropia para o resultado numérico |
 | `EICRA`  | Configura modo de disparo da INT0 |
 | `EIMSK`  | Habilita INT0 |
