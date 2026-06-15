@@ -65,9 +65,9 @@ RESET:
     ; Variáveis
     LDI BUTTON_PRESSED_FLAG, 0
     LDI SELECTED_DISPLAY, 0
-    LDI DIGIT_UNIT, 0
-    LDI DIGIT_TENS, 0
-    LDI DIGIT_HUNDREDS, 0
+    LDI DIGIT_UNIT, 10
+    LDI DIGIT_TENS, 10
+    LDI DIGIT_HUNDREDS, 10
     LDI LED_STATE, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
 
     ; INT0 (Botão)
