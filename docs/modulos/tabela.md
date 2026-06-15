@@ -38,6 +38,7 @@ Mapeamento dos segmentos nos pinos de PORTD:
 | 7 | 7 | `0x1F` |
 | 8 | 8 | `0x04` |
 | 9 | 9 | `0x0C` |
+| 10 | - | `0xFE` |
 
 ---
 
