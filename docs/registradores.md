@@ -28,7 +28,7 @@ Todos os registradores de uso geral da aplicação.
 | `TCCR1B`  | Prescaler do Timer1 |
 | `TIMSK0`  | Habilita interrupção de overflow do Timer0 para a troca de displays |
 | `TCNT0`  | Contador do Timer0 — fonte de entropia para determinar vitória |
-| `TCNT1`  | Contador do Timer0 — fonte de entropia para o resultado numérico |
+| `TCNT1`  | Contador do Timer1 — fonte de entropia para o resultado numérico |
 | `EICRA`  | Configura modo de disparo da INT0 |
 | `EIMSK`  | Habilita INT0 |
 | `EIFR`  | Flag de interrupção externa — limpo manualmente após sorteio |
