@@ -1,6 +1,3 @@
-<<<<<<< Updated upstream
-# slot-machine-project
-=======
 # Caça-Níqueis em Assembly AVR
 
 Projeto final da disciplina **MATA49 — Programação de Software Básico**.
@@ -72,4 +69,3 @@ make flash  # envia para o ATMega
 - Celso Santos Bomfim Junior
 - Eduardo Lazarini Fontana
 - Jean Carlo Moreira de Oliveira
->>>>>>> Stashed changes
