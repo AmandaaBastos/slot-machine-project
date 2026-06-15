@@ -1,0 +1,65 @@
+; ==========================================
+; INTERRUPÇÃO: TIMER0_OVF (Multiplexação)
+; ==========================================
+TIMER0_OVF:
+    PUSH AUX
+    IN AUX, SREG
+    PUSH AUX
+    PUSH AUX_2
+    PUSH R30
+    PUSH R31
+
+    LDI AUX_2, 0
+
+    IN AUX, PORTB
+    ORI AUX, 0x07
+    OUT PORTB, AUX
+
+    LDI ZL, low(TABELA_7SEG * 2)
+    LDI ZH, high(TABELA_7SEG * 2)
+
+    CPI SELECTED_DISPLAY, 0
+    BREQ MUX_D1
+    CPI SELECTED_DISPLAY, 1
+    BREQ MUX_D2
+
+MUX_D3:
+    ADD ZL, DIGIT_HUNDREDS
+    ADC ZH, AUX_2
+    LPM AUX, Z
+    OUT PORTD, AUX
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB2)
+    OUT PORTB, AUX
+    LDI SELECTED_DISPLAY, 0
+    RJMP MUX_SAIR
+
+MUX_D1:
+    ADD ZL, DIGIT_UNIT
+    ADC ZH, AUX_2
+    LPM AUX, Z
+    OUT PORTD, AUX
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB0)
+    OUT PORTB, AUX
+    LDI SELECTED_DISPLAY, 1
+    RJMP MUX_SAIR
+
+MUX_D2:
+    ADD ZL, DIGIT_TENS
+    ADC ZH, AUX_2
+    LPM AUX, Z
+    OUT PORTD, AUX
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB1)
+    OUT PORTB, AUX
+    LDI SELECTED_DISPLAY, 2
+
+MUX_SAIR:
+    POP R31
+    POP R30
+    POP AUX_2
+    POP AUX
+    OUT SREG, AUX
+    POP AUX
+    RETI
