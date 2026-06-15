@@ -10,7 +10,7 @@ ISR do overflow do Timer0 (`TIMER0_OVF`). Responsável pela multiplexação dos 
 
 Os três displays compartilham os mesmos pinos de segmento (PORTD). Apenas um display fica ativo por vez, alternando tão rápido que o olho percebe os três acesos simultaneamente.
 
-A cada chamada da ISR, o próximo display é ativado na sequência: `D1 → D2 → D3 → D1 → ...`
+A cada chamada da ISR, o próximo display é ativado na sequência: `D1 - D2 → D3 → D1 → ...`
 
 ---
 
@@ -33,8 +33,8 @@ TIMER0_OVF
 O endereço do dígito na tabela é calculado somando o valor do dígito ao endereço base:
 
 ```asm
-LDI ZL, low(TABELA_7SEG * 2)
-LDI ZH, high(TABELA_7SEG * 2)
+LDI ZL, LOW(TABELA_7SEG * 2)
+LDI ZH, HIGH(TABELA_7SEG * 2)
 ADD ZL, DIGIT_UNIT      ; desloca para o byte do dígito desejado
 ADC ZH, AUX_2           ; AUX_2 = 0, propaga carry sem somar lixo
 LPM AUX, Z              ; carrega o byte de segmentos da Flash
@@ -47,7 +47,7 @@ O `* 2` converte o endereço de palavra para endereço de byte (necessário para
 
 ## Controle dos transistores
 
-Cada display é ativado individualmente por um transistor NPN controlado por PORTB. A lógica é invertida (ânodo comum):
+Cada display é ativado individualmente por um transistor PNP controlado por PORTB. A lógica é invertida (ânodo comum):
 
 | Display | Bit PORTB | Ativo em |
 |---|---|---|
