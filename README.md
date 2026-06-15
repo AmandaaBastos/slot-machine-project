@@ -10,9 +10,9 @@ Implementação de um caça-níqueis em Assembly para o microcontrolador **ATmeg
 
 - Pressione o botão para iniciar o sorteio
 - O resultado é baseado na entropia do Timer0 no momento exato do clique
-- **20%** de chance de vitória 777 (Jackpot) (LED piscando)
-- **20%** de chance de vitória normal — triplo de qualquer número exceto 7 (LED aceso)
-- **60%** de chance de derrota — três dígitos diferentes
+- **5%** de chance de vitória 777 (Jackpot) (LED piscando)
+- **15%** de chance de vitória normal — triplo de qualquer número exceto 7 (LED aceso)
+- **85%** de chance de derrota — três dígitos diferentes
 
 ---
 
