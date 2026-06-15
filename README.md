@@ -39,7 +39,34 @@ make        # builda em build/main.hex
 make flash  # envia para o ATMega
 ```
 
-> O Makefile possui uma diretiva para remover arquivos que não sejam o .hex, caso seja necessário, remova esse item no arquivo Makefile ou compile manualmente utilizando o avra 
+> O Makefile possui uma diretiva para remover arquivos que não sejam o .hex, caso seja necessário, remova esse item no arquivo Makefile ou compile manualmente utilizando o avra
+
+---
+
+## Testes
+
+Cada teste força deterministicamente um dos três casos do sorteio, roda a animação completa e mantém o botão funcional para rodadas seguintes.
+
+```bash
+# Compilar todos os testes
+make test
+
+# Compilar um teste específico
+make test_vitoria_777
+make test_vitoria_normal
+make test_derrota
+
+# Flash dos testes
+make flash_test_derrota
+make flash_test_vitoria_777
+make flash_test_vitoria_normal
+```
+
+Os `.hex` gerados ficam em `build/`. Para voltar ao firmware principal:
+
+```bash
+make flash
+```
 
 ---
 
