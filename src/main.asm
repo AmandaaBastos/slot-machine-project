@@ -19,7 +19,7 @@
 .DEF DIGIT_TENS = R21
 .DEF DIGIT_HUNDREDS = R22
 .DEF ANIMATION_COUNTER = R23
-.DEF LED_FLAG = R24
+.DEF LED_STATE = R24
 .DEF RESULT_UNIT = R26
 .DEF RESULT_TENS = R27
 .DEF RESULT_HUNDREDS = R28
@@ -68,7 +68,7 @@ RESET:
     LDI DIGIT_UNIT, 0
     LDI DIGIT_TENS, 0
     LDI DIGIT_HUNDREDS, 0
-    LDI LED_FLAG, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
+    LDI LED_STATE, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
 
     ; INT0 (Botão)
     LDI AUX, (1<<ISC01) | (1<<ISC00)
@@ -94,7 +94,7 @@ MAIN_LOOP:
     BRNE CHECK_LED
     RJMP CALCULA_RESULTADO
 CHECK_LED:
-    CPI LED_FLAG, 2
+    CPI LED_STATE, 2
     BRNE MAIN_LOOP
 
     ; lógica do led pisca
