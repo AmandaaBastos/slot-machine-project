@@ -2,21 +2,21 @@
 ; SUBROTINA: DELAY
 ; ==========================================
 DELAY_MS:
-    PUSH r29
-    PUSH r17
-    PUSH r16
+    PUSH DELAY_AUX
+    PUSH AUX_2
+    PUSH AUX
 LOOP_EXTERNO:
-    LDI r17, 21
+    LDI AUX_2, 21
 LOOP_MEIO:
-    LDI r16, 250
+    LDI AUX, 250
 LOOP_INTERNO:
-    DEC r16
+    DEC AUX
     BRNE LOOP_INTERNO
-    DEC r17
+    DEC AUX_2
     BRNE LOOP_MEIO
-    DEC r29
+    DEC DELAY_AUX
     BRNE LOOP_EXTERNO
-    POP r16
-    POP r17
-    POP r29
+    POP AUX
+    POP AUX_2
+    POP DELAY_AUX
     RET
