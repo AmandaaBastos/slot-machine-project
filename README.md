@@ -1,3 +1,6 @@
+<<<<<<< Updated upstream
+# slot-machine-project
+=======
 # Caça-Níqueis em Assembly AVR
 
 Projeto final da disciplina **MATA49 — Programação de Software Básico**.
@@ -61,3 +64,12 @@ make flash  # envia para o ATMega
 | [mux](docs/modulos/mux.md) | `src/mux.asm` | ISR Timer0 — multiplexação dos displays |
 | [delay](docs/modulos/delay.md) | `src/delay.asm` | Subrotina de delay por software |
 | [tabela](docs/modulos/tabela.md) | `src/tabela.asm` | Codificação 7 segmentos |
+
+
+# Integrantes
+- Amanda Bastos de Melo
+- André Luiz de Oliveira Junior
+- Celso Santos Bomfim Junior
+- Eduardo Lazarini Fontana
+- Jean Carlo Moreira de Oliveira
+>>>>>>> Stashed changes
