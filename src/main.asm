@@ -67,20 +67,20 @@ RESET:
     ; Timer1 (Entropia Adicional)
     LDI AUX, (1<<CS10)
     STS TCCR1B, AUX
+    
+    ; INT0 (Botão)
+    LDI AUX, (1<<ISC01) | (1<<ISC00)
+    STS EICRA, AUX
+    LDI AUX, (1<<INT0)
+    OUT EIMSK, AUX
 
     ; Variáveis
-    LDI BUTTON_PRESSED_FLAG, 0
     LDI SELECTED_DISPLAY, 0
     LDI DIGIT_UNIT, 10
     LDI DIGIT_TENS, 10
     LDI DIGIT_HUNDREDS, 10
     LDI LED_STATE, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
 
-    ; INT0 (Botão)
-    LDI AUX, (1<<ISC01) | (1<<ISC00)
-    STS EICRA, AUX
-    LDI AUX, (1<<INT0)
-    OUT EIMSK, AUX
 
     SEI
 
@@ -88,6 +88,7 @@ RESET:
     RCALL DELAY_MS
     LDI DELAY_AUX, 250
     RCALL DELAY_MS
+    LDI BUTTON_PRESSED_FLAG, 0
 
     LDI AUX, (1<<INTF0)
     OUT EIFR, AUX
