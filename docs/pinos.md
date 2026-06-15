@@ -42,8 +42,8 @@ Pull-up interno no botão: `PORTD = 0x04`
 
 | Componente | Qtd | Observação |
 |---|---|---|
-| Display 7 segmentos ânodo comum | 3 | Catodo controlado por transistor NPN |
-| Transistor NPN (ex: BC547) | 3 | Um por display |
+| Display 7 segmentos ânodo comum | 3 | Catodo controlado por transistor PNP |
+| Transistor PNP (ex: BC547) | 3 | Um por display |
 | LED | 1 | Conectado ao PB3 |
 | Push-button | 1 | Conectado ao PD2 (INT0) |
 | Resistores | — | Para segmentos e base dos transistores |
