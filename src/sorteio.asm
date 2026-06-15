@@ -1,5 +1,5 @@
 ; ==========================================
-; ETAPA 1: LÓGICA DE SORTEIO (20% CHANCE)
+; ETAPA 1: LÓGICA DE SORTEIO (5% 777 + 15% NORMAL + 80% DERROTA)
 ; ==========================================
 CALCULA_RESULTADO:
     IN AUX, PORTB
@@ -10,12 +10,12 @@ CALCULA_RESULTADO:
     ; 1. LÊ A ENTROPIA DO HARDWARE NO MOMENTO EXATO DO CLIQUE
     IN AUX_2, TCNT0       ; AUX_2 = Valor Aleatório (0 a 255)
 
-    ; 2. 20% para vitória 777
-    CPI AUX_2, 51
+    ; 2. 5% para vitória 777
+    CPI AUX_2, 13
     BRLO DEU_VITORIA_777
 
-    ; 3. 20% para vitória normal
-    CPI AUX_2, 102
+    ; 3. 15% para vitória normal
+    CPI AUX_2, 51
     BRLO DEU_VITORIA_NORMAL
 
     ; 4. resto da porcentagem derrota
@@ -47,22 +47,22 @@ APLICA_VITORIA_NORMAL:
     RJMP INICIA_ANIMACAO
 
 DEU_DERROTA:
+    LDS ENTROPIA_UNIT, TCNT1L
+    LDS ENTROPIA_TENS, TCNT1H
+    LDS ENTROPIA_HUNDREDS, TCNT1L
+
     ; Gera o Dígito 1
-    MOV AUX, AUX_2
+    MOV AUX, ENTROPIA_UNIT
     RCALL MODULO_10
     MOV RESULT_UNIT, AUX
 
-    ; Gera o Dígito 2 (Adiciona salto primo para ser diferente)
-    MOV AUX, AUX_2
-    LDI R25, 43
-    ADD AUX, R25
+    ; Gera o Dígito 2
+    MOV AUX, ENTROPIA_TENS
     RCALL MODULO_10
     MOV RESULT_TENS, AUX
 
     ; Gera o Dígito 3
-    MOV AUX, AUX_2
-    LDI R25, 107
-    ADD AUX, R25
+    MOV AUX, ENTROPIA_HUNDREDS
     RCALL MODULO_10
     MOV RESULT_HUNDREDS, AUX
 

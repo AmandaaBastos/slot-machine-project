@@ -9,21 +9,24 @@
 ; ==========================================
 ; INICIALIZAÇÃO DE VARIÁVEIS
 ; ==========================================
-.EQU LED_OUTPUT = PB3
+.equ LED_OUTPUT = PB3
 
-.DEF AUX = R16
-.DEF AUX_2 = R17
-.DEF BUTTON_PRESSED_FLAG = R18
-.DEF SELECTED_DISPLAY = R19
-.DEF DIGIT_UNIT = R20
-.DEF DIGIT_TENS = R21
-.DEF DIGIT_HUNDREDS = R22
-.DEF ANIMATION_COUNTER = R23
-.DEF LED_FLAG = R24
-.DEF RESULT_UNIT = R26
-.DEF RESULT_TENS = R27
-.DEF RESULT_HUNDREDS = R28
-.DEF DELAY_AUX = R29
+.def AUX = R16
+.def AUX_2 = R17
+.def BUTTON_PRESSED_FLAG = R18
+.def SELECTED_DISPLAY = R19
+.def DIGIT_UNIT = R20
+.def DIGIT_TENS = R21
+.def DIGIT_HUNDREDS = R22
+.def ANIMATION_COUNTER = R23
+.def LED_FLAG = R24
+.def RESULT_UNIT = R26
+.def RESULT_TENS = R27
+.def RESULT_HUNDREDS = R28
+.def DELAY_AUX = R29
+.def ENTROPIA_UNIT = R10
+.def ENTROPIA_TENS = R11
+.def ENTROPIA_HUNDREDS = R12
 
 ; ==========================================
 ; VETORES DE INTERRUPÇÃO
@@ -61,13 +64,16 @@ RESET:
     OUT TCCR0B, AUX
     LDI AUX, (1<<TOIE0)
     STS TIMSK0, AUX
+    ; Timer1 (Entropia Adicional)
+    LDI AUX, (1<<CS10)
+    STS TCCR1B, AUX
 
     ; Variáveis
     LDI BUTTON_PRESSED_FLAG, 0
     LDI SELECTED_DISPLAY, 0
-    LDI DIGIT_UNIT, 0
-    LDI DIGIT_TENS, 0
-    LDI DIGIT_HUNDREDS, 0
+    LDI DIGIT_UNIT, 10
+    LDI DIGIT_TENS, 10
+    LDI DIGIT_HUNDREDS, 10
     LDI LED_FLAG, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
 
     ; INT0 (Botão)
