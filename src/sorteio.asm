@@ -5,13 +5,46 @@ CALCULA_RESULTADO:
     in r16, PORTB
     andi r16, ~(1<<PB3)
     out PORTB, r16
+    ldi R24, 0   ; Reset do led p/ prox rodada
 
     ; 1. LÊ A ENTROPIA DO HARDWARE NO MOMENTO EXATO DO CLIQUE
     in r17, TCNT0       ; R17 = Valor Aleatório (0 a 255)
 
-    ; 2. CALCULA A CHANCE DE VITÓRIA (20% de 255 é aprox. 51)
+    ; 2. 20% para vitória 777
     cpi r17, 51
-    brlo DEU_VITORIA    ; Se R17 for menor que 51, ganhou!
+    brlo DEU_VITORIA_777
+
+    ; 3. 20% para vitória normal
+    cpi r17, 102
+    brlo DEU_VITORIA_NORMAL
+
+    ; 4. resto da porcentagem derrota
+    rjmp DEU_DERROTA
+
+DEU_VITORIA_777:
+    ldi r16, 7
+    mov R26, r16
+    mov R27, r16
+    mov R28, r16
+    ldi R24, 2   ; ativa o modo blink
+    rjmp INICIA_ANIMACAO
+
+DEU_VITORIA_NORMAL:
+    ; Pega um número aleatório (0 a 9)
+    mov r16, r17
+    rcall MODULO_10
+
+    ; Impede que vitória normal também seja 7
+    cpi r16, 7
+    brne APLICA_VITORIA_NORMAL
+    ldi r16, 8          ; Se der 7, transforma em 8
+
+APLICA_VITORIA_NORMAL:
+    mov R26, r16
+    mov R27, r16
+    mov R28, r16
+    ldi R24, 1   ; led ligado fixo
+    rjmp INICIA_ANIMACAO
 
 DEU_DERROTA:
     ; Gera o Dígito 1
@@ -45,14 +78,6 @@ DEU_DERROTA:
     rcall MODULO_10
     mov R28, r16
     rjmp INICIA_ANIMACAO
-
-DEU_VITORIA:
-    ; Pega um número aleatório (0 a 9) e estampa nos 3 displays
-    mov r16, r17
-    rcall MODULO_10
-    mov R26, r16
-    mov R27, r16
-    mov R28, r16
 
 ; ==========================================
 ; ETAPA 2: ANIMAÇÃO EM 3 FASES
@@ -127,11 +152,11 @@ F3_DELAY:
 ; ==========================================
 ; ETAPA 3: FINALIZA E EXIBE
 ; ==========================================
-    cp R20, R21
-    brne FIM_SORTEIO
-    cp R21, R22
+
+    cpi R24, 1
     brne FIM_SORTEIO
 
+    ; Se R24 = 1, ganha e acende fixo. Se R24 = 2, ganha e fica piscando (via MAIN_LOOP)
     in r16, PORTB
     ori r16, (1<<PB3)
     out PORTB, r16

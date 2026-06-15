@@ -4,9 +4,7 @@
 ; 20% de Vitória | Combinações de 000 a 999
 ; ======================================================================
 
-.nolist
 .include "m328Pdef.inc"
-.list
 
 ; ==========================================
 ; VETORES DE INTERRUPÇÃO
@@ -51,9 +49,10 @@ RESET:
     ldi R20, 0
     ldi R21, 0
     ldi R22, 0
+    ldi R24, 0    ; flag do led    0 = desliga, 1=liga, 2=pisca
 
     ; INT0 (Botão)
-    ldi r16, (1<<ISC01)
+    ldi r16, (1<<ISC01) | (1<<ISC00)
     sts EICRA, r16
     ldi r16, (1<<INT0)
     out EIMSK, r16
@@ -73,8 +72,21 @@ RESET:
 ; ==========================================
 MAIN_LOOP:
     cpi R18, 1
-    brne MAIN_LOOP
+    brne CHECK_LED
     rjmp CALCULA_RESULTADO
+CHECK_LED:
+    cpi R24, 2
+    brne MAIN_LOOP
+
+    ; lógica do led pisca
+    ldi R29, 100
+    rcall DELAY_MS
+    in r16, PORTB
+    ldi r17, (1<<PB3)
+    eor r16, r17
+    out PORTB, r16
+
+    rjmp MAIN_LOOP
 
 ; ==========================================
 ; MÓDULOS
