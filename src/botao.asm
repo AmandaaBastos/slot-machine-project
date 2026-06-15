@@ -2,17 +2,17 @@
 ; INTERRUPÇÃO: BOTAO_INT (Botão - INT0)
 ; ==========================================
 BOTAO_INT:
-    push r16
-    in r16, SREG
-    push r16
+    PUSH r16
+    IN r16, SREG
+    PUSH r16
 
-    ldi r16, 1
-    cpi R18, 0
-    brne IGNORA_BOTAO
-    mov R18, r16
+    LDI r16, 1
+    CPI R18, 0
+    BRNE IGNORA_BOTAO
+    MOV R18, r16
 IGNORA_BOTAO:
 
-    pop r16
-    out SREG, r16
-    pop r16
-    reti
+    POP r16
+    OUT SREG, r16
+    POP r16
+    RETI
