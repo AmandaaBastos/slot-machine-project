@@ -2,64 +2,64 @@
 ; INTERRUPÇÃO: TIMER0_OVF (Multiplexação)
 ; ==========================================
 TIMER0_OVF:
-    PUSH r16
-    IN r16, SREG
-    PUSH r16
-    PUSH r17
-    PUSH r30
-    PUSH r31
+    PUSH AUX
+    IN AUX, SREG
+    PUSH AUX
+    PUSH AUX_2
+    PUSH R30
+    PUSH R31
 
-    LDI r17, 0
+    LDI AUX_2, 0
 
-    IN r16, PORTB
-    ORI r16, 0x07
-    OUT PORTB, r16
+    IN AUX, PORTB
+    ORI AUX, 0x07
+    OUT PORTB, AUX
 
     LDI ZL, low(TABELA_7SEG * 2)
     LDI ZH, high(TABELA_7SEG * 2)
 
-    CPI R19, 0
+    CPI SELECTED_DISPLAY, 0
     BREQ MUX_D1
-    CPI R19, 1
+    CPI SELECTED_DISPLAY, 1
     BREQ MUX_D2
 
 MUX_D3:
-    ADD ZL, R22
-    ADC ZH, r17
-    LPM r16, Z
-    OUT PORTD, r16
-    IN r16, PORTB
-    ANDI r16, ~(1<<PB2)
-    OUT PORTB, r16
-    LDI R19, 0
+    ADD ZL, DIGIT_HUNDREDS
+    ADC ZH, AUX_2
+    LPM AUX, Z
+    OUT PORTD, AUX
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB2)
+    OUT PORTB, AUX
+    LDI SELECTED_DISPLAY, 0
     RJMP MUX_SAIR
 
 MUX_D1:
-    ADD ZL, R20
-    ADC ZH, r17
-    LPM r16, Z
-    OUT PORTD, r16
-    IN r16, PORTB
-    ANDI r16, ~(1<<PB0)
-    OUT PORTB, r16
-    LDI R19, 1
+    ADD ZL, DIGIT_UNIT
+    ADC ZH, AUX_2
+    LPM AUX, Z
+    OUT PORTD, AUX
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB0)
+    OUT PORTB, AUX
+    LDI SELECTED_DISPLAY, 1
     RJMP MUX_SAIR
 
 MUX_D2:
-    ADD ZL, R21
-    ADC ZH, r17
-    LPM r16, Z
-    OUT PORTD, r16
-    IN r16, PORTB
-    ANDI r16, ~(1<<PB1)
-    OUT PORTB, r16
-    LDI R19, 2
+    ADD ZL, DIGIT_TENS
+    ADC ZH, AUX_2
+    LPM AUX, Z
+    OUT PORTD, AUX
+    IN AUX, PORTB
+    ANDI AUX, ~(1<<PB1)
+    OUT PORTB, AUX
+    LDI SELECTED_DISPLAY, 2
 
 MUX_SAIR:
-    POP r31
-    POP r30
-    POP r17
-    POP r16
-    OUT SREG, r16
-    POP r16
+    POP R31
+    POP R30
+    POP AUX_2
+    POP AUX
+    OUT SREG, AUX
+    POP AUX
     RETI
