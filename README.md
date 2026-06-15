@@ -64,8 +64,8 @@ make flash  # envia para o ATMega
 
 
 # Integrantes
-- Amanda Bastos de Melo
-- André Luiz de Oliveira Junior
-- Celso Santos Bomfim Junior
-- Eduardo Lazarini Fontana
-- Jean Carlo Moreira de Oliveira
+- Amanda Bastos de Melo (Base inicial do projeto e slides)
+- André Luiz de Oliveira Junior (Modularização, melhorar entropia do projeto e ajuda na documentação)
+- Celso Santos Bomfim Junior (Alterações no circuito do simulIDE, montagem de circuito físico e ajuda na documentação)
+- Eduardo Lazarini Fontana (Documentação, nomeclatura de registradores, padrões de estilização de código)
+- Jean Carlo Moreira de Oliveira (Modo Jackpot e alterações no circuito do simulIDE)
